@@ -1,0 +1,23 @@
+#! usr/bin/python3
+import psutil
+import time
+
+def log_network_traffic(log_file):
+    while True:
+        # Get the network I/O statistics
+        net_io = psutil.net_io_counters()
+        current_time = time.strftime('%Y-%m-%d %H:%M:%S')
+
+        # Create a log entry with network traffic information
+        log_entry = f"{current_time} - Sent: {net_io.bytes_sent} bytes, Received: {net_io.bytes_recv} bytes\n"
+
+        # Append the log entry to the log file
+        with open(log_file, 'a') as file:
+            file.write(log_entry)
+
+        # Wait for 1 second before logging the next entry
+        time.sleep(1)
+
+if __name__ == '__main__':
+    log_file = 'network_traffic.log'
+    log_network_traffic(log_file)

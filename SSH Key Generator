@@ -1,0 +1,25 @@
+#! usr/bin/python3
+import paramiko
+
+def generate_ssh_key_pair():
+    """
+    Generates an SSH key pair using RSA algorithm.
+
+    Returns:
+        private_key (str): The private key string.
+        public_key (str): The public key string.
+    """
+    key = paramiko.RSAKey.generate(2048)  # Generate a 2048-bit RSA key pair
+    
+    private_key = key.get_private_key_string()
+    public_key = key.get_base64()
+
+    return private_key, public_key
+
+if __name__ == '__main__':
+    # Entry point of the script
+    private_key, public_key = generate_ssh_key_pair()
+    print("Private Key:")
+    print(private_key)
+    print("\nPublic Key:")
+    print(public_key)

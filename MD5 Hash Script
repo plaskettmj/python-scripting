@@ -1,0 +1,23 @@
+#! usr/bin/python3
+import hashlib
+
+def calculate_md5(file_path):
+    try:
+        with open(file_path, 'rb') as file:
+            md5_hash = hashlib.md5()
+            for chunk in iter(lambda: file.read(4096), b''):
+                md5_hash.update(chunk)
+        
+        return md5_hash.hexdigest()
+
+    except FileNotFoundError:
+        print("File not found.")
+    except IsADirectoryError:
+        print("The specified path is a directory.")
+    except Exception as e:
+        print("An error occurred:", e)
+
+# Example usage
+file_path = 'path/to/your/file.ext'
+md5_hash = calculate_md5(file_path)
+print("MD5 Hash:", md5_hash)

